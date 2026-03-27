@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<!--
+===============================================================================
+ Juego de la Vida de Conway — Interfaz Web
+ Materia: MSS-953 Modelado y Simulación de Sistemas
+ Práctica 2: Modelado con autómatas celulares
+===============================================================================
+-->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Simulación interactiva del Juego de la Vida de Conway - Autómatas Celulares">
+    <title>Juego de la Vida de Conway | Autómatas Celulares</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Lucide Icons (SVG icons) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Estilos -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- Notificación Toast -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- Header principal -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <div class="cell-dot"></div>
+                    <div class="cell-dot"></div>
+                    <div class="cell-dot"></div>
+                    <div class="cell-dot"></div>
+                </div>
+                <div>
+                    <h1>Game of Life</h1>
+                    <p class="subtitle">Autómata Celular de Conway</p>
+                </div>
+            </div>
+            <div class="header-badge">
+                <span>MSS-953</span>
+                <span class="separator">•</span>
+                <span>Práctica 2</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- Contenido principal -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <main class="main-container">
+
+        <!-- Panel de control lateral -->
+        <aside class="control-panel">
+            
+            <!-- Estadísticas -->
+            <div class="panel-section stats-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i data-lucide="bar-chart-3" class="icon"></i> Estadísticas
+                    </h3>
+                    <button id="btn-clear-stats" class="btn-icon-only" title="Limpiar Grid">
+                        <i data-lucide="trash-2"></i>
+                    </button>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-value" id="stat-generation">0</span>
+                        <span class="stat-label">Generación</span>
+                    </div>
+                    <div class="stat-card alive">
+                        <span class="stat-value" id="stat-alive">0</span>
+                        <span class="stat-label">Vivas</span>
+                    </div>
+                    <div class="stat-card dead">
+                        <span class="stat-value" id="stat-dead">0</span>
+                        <span class="stat-label">Muertas</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value" id="stat-total">0</span>
+                        <span class="stat-label">Total</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controles de simulación -->
+            <div class="panel-section">
+                <h3 class="section-title">
+                    <i data-lucide="gamepad-2" class="icon"></i> Controles
+                </h3>
+                <div class="controls-group">
+                    <div class="btn-row">
+                        <button id="btn-play" class="btn btn-primary" title="Iniciar simulación">
+                            <i data-lucide="play" class="btn-icon"></i> Iniciar
+                        </button>
+                        <button id="btn-pause" class="btn btn-warning" title="Pausar simulación" disabled>
+                            <i data-lucide="pause" class="btn-icon"></i> Pausar
+                        </button>
+                    </div>
+                    <div class="btn-row">
+                        <button id="btn-step" class="btn btn-secondary" title="Avanzar un paso">
+                            <i data-lucide="skip-forward" class="btn-icon"></i> Paso
+                        </button>
+                        <button id="btn-reset" class="btn btn-danger" title="Reiniciar simulación">
+                            <i data-lucide="refresh-cw" class="btn-icon"></i> Reiniciar
+                        </button>
+                    </div>
+                    <button id="btn-clear" class="btn btn-ghost full-width" title="Limpiar todo el grid">
+                        <i data-lucide="trash" class="btn-icon"></i> Limpiar Grid
+                    </button>
+                </div>
+            </div>
+
+            <!-- Configuración -->
+            <div class="panel-section">
+                <h3 class="section-title">
+                    <i data-lucide="settings" class="icon"></i> Configuración
+                </h3>
+                
+                <!-- Modo de Simulación -->
+                <div class="config-group">
+                    <label class="config-label">Modo de Simulación</label>
+                    <select id="select-mode" class="input-field full-width">
+                        <option value="conway" selected>Juego de la Vida (Conway)</option>
+                        <option value="forest_fire">Incendio Forestal</option>
+                        <option value="epidemic">Propagación de Epidemia (SIR)</option>
+                        <option value="predator_prey">Depredador-Presa</option>
+                        <option value="urban">Crecimiento Urbano</option>
+                        <option value="traffic">Tráfico Vehicular</option>
+                    </select>
+                </div>
+
+                <!-- Leyenda Dinámica -->
+                <div class="config-group" id="legend-group">
+                    <label class="config-label">Leyenda de Estados</label>
+                    <div id="legend-container" class="legend-container">
+                        <!-- Se llena dinámicamente con JS -->
+                    </div>
+                </div>
+
+                <!-- Tamaño del grid -->
+                <div class="config-group">
+                    <label class="config-label">Tamaño del Grid</label>
+                    <div class="preset-buttons">
+                        <button class="btn-preset" data-size="5">5×5</button>
+                        <button class="btn-preset" data-size="10">10×10</button>
+                        <button class="btn-preset" data-size="30">30×30</button>
+                        <button class="btn-preset active" data-size="50">50×50</button>
+                        <button class="btn-preset" data-size="75">75×75</button>
+                        <button class="btn-preset" data-size="100">100×100</button>
+                    </div>
+                    <div class="custom-size">
+                        <label class="config-sublabel">Personalizado:</label>
+                        <div class="size-inputs">
+                            <input type="number" id="input-rows" class="input-field" value="50" min="3" max="150" placeholder="Filas">
+                            <span class="size-separator">×</span>
+                            <input type="number" id="input-cols" class="input-field" value="50" min="3" max="150" placeholder="Columnas">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Densidad -->
+                <div class="config-group">
+                    <label class="config-label">
+                        Densidad inicial: <span id="density-value" class="highlight">30%</span>
+                    </label>
+                    <input type="range" id="input-density" class="slider" min="5" max="80" value="30">
+                </div>
+
+                <!-- Velocidad -->
+                <div class="config-group">
+                    <label class="config-label">
+                        Velocidad: <span id="speed-value" class="highlight">200ms</span>
+                    </label>
+                    <input type="range" id="input-speed" class="slider" min="50" max="1000" value="200" step="50">
+                </div>
+
+                <button id="btn-apply" class="btn btn-accent full-width">
+                    <i data-lucide="check-circle" class="btn-icon"></i> Aplicar Configuración
+                </button>
+            </div>
+
+            <!-- Reglas de Conway -->
+            <div class="panel-section rules-section">
+                <h3 class="section-title">
+                    <i data-lucide="scroll-text" class="icon"></i> Reglas de Conway
+                </h3>
+                <div class="rules-list">
+                    <div class="rule">
+                        <i data-lucide="skull" class="rule-svg death"></i>
+                        <span>Viva + &lt;2 vecinos → <strong>Muere</strong> (soledad)</span>
+                    </div>
+                    <div class="rule">
+                        <i data-lucide="heart" class="rule-svg survive"></i>
+                        <span>Viva + 2-3 vecinos → <strong>Sobrevive</strong></span>
+                    </div>
+                    <div class="rule">
+                        <i data-lucide="skull" class="rule-svg death"></i>
+                        <span>Viva + &gt;3 vecinos → <strong>Muere</strong> (sobrepoblación)</span>
+                    </div>
+                    <div class="rule">
+                        <i data-lucide="sparkles" class="rule-svg birth"></i>
+                        <span>Muerta + 3 vecinos → <strong>Revive</strong> (reproducción)</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Área del canvas / grid -->
+        <section class="grid-area">
+            <div class="canvas-container" id="canvas-container">
+                <canvas id="game-canvas"></canvas>
+            </div>
+            <div class="grid-footer">
+                <span id="grid-info">Grid: 50 × 50 | Click en una celda para alternar su estado</span>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- Footer -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <footer class="footer">
+        <p>Juego de la Vida de Conway — Modelado y Simulación de Sistemas (MSS-953) — Práctica 2</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/game.js') }}"></script>
+</body>
+</html>

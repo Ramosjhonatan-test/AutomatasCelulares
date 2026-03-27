@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parte 2: Fenómeno Real — Epidemia SIR</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.svg') }}" type="image/svg+xml">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body data-page="parte2">
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <header class="header">
+        <div class="header-content" style="border-bottom: 1px solid rgba(59, 130, 246, 0.3);">
+            <div class="logo">
+                <div class="logo-icon" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;">
+                    <i data-lucide="activity" style="width: 24px; height: 24px;"></i>
+                </div>
+                <div>
+                    <h1>Parte 2: Propagación de Epidemia</h1>
+                    <p class="subtitle" style="color: #3b82f6;">CI: 13054261 — DÍGITO: 1</p>
+                </div>
+            </div>
+            <div class="header-badge" style="display: flex; align-items: center; gap: 15px; border-color: rgba(59, 130, 246, 0.2);">
+                <a href="/" class="btn-back" style="margin: 0;">
+                    <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i> Volver al Inicio
+                </a>
+                <div style="color: #3b82f6;">
+                    <span>MSS-953</span>
+                    <span class="separator">•</span>
+                    <span>Práctica 2</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <aside class="control-panel">
+            
+            <!-- Estadísticas -->
+            <div class="panel-section stats-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i data-lucide="bar-chart-3" class="icon"></i> Estadísticas
+                    </h3>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-value" id="stat-generation">0</span>
+                        <span class="stat-label">Días (Generación)</span>
+                    </div>
+                    <div class="stat-card alive" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.2);">
+                        <span class="stat-value" id="stat-alive" style="color: #ef4444;">0</span>
+                        <span class="stat-label">Enfermos</span>
+                    </div>
+                    <div class="stat-card dead" style="background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.2);">
+                        <span class="stat-value" id="stat-dead" style="color: #3b82f6;">0</span>
+                        <span class="stat-label">Sanos (Vulnerables)</span>
+                    </div>
+                    <div class="stat-card" style="background: rgba(100, 116, 139, 0.1); border-color: rgba(100, 116, 139, 0.2);">
+                        <span class="stat-value" id="stat-total" style="color: #94a3b8;">0</span>
+                        <span class="stat-label">Recuperados</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controles de simulación -->
+            <div class="panel-section">
+                <h3 class="section-title">
+                    <i data-lucide="gamepad-2" class="icon"></i> Simulación
+                </h3>
+                <div class="controls-group">
+                    <div class="btn-row">
+                        <button id="btn-play" class="btn btn-primary" title="Iniciar simulación" style="background: #3b82f6; border-color: #2563eb;">
+                            <i data-lucide="play" class="btn-icon"></i> Iniciar
+                        </button>
+                        <button id="btn-pause" class="btn btn-warning" title="Pausar simulación" disabled>
+                            <i data-lucide="pause" class="btn-icon"></i> Pausar
+                        </button>
+                    </div>
+                    <div class="btn-row">
+                        <button id="btn-step" class="btn btn-secondary" title="Avanzar un día">
+                            <i data-lucide="skip-forward" class="btn-icon"></i> Día ++
+                        </button>
+                        <button id="btn-reset" class="btn btn-danger" title="Reiniciar población">
+                            <i data-lucide="refresh-cw" class="btn-icon"></i> Reiniciar
+                        </button>
+                    </div>
+                    <button id="btn-clear" class="btn btn-ghost full-width" title="Vaciar ciudad">
+                        <i data-lucide="trash" class="btn-icon"></i> Limpiar Ciudad
+                    </button>
+                </div>
+            </div>
+
+            <!-- Configuración -->
+            <div class="panel-section">
+                <h3 class="section-title">
+                    <i data-lucide="settings" class="icon"></i> Parámetros
+                </h3>
+                
+                <!-- Modo de Simulación Oculto -->
+                <div class="config-group" style="display: none;">
+                    <select id="select-mode" class="input-field full-width">
+                        <option value="epidemic" selected>Propagación de Epidemia (SIR)</option>
+                    </select>
+                </div>
+
+                <!-- Leyenda Dinámica -->
+                <div class="config-group" id="legend-group">
+                    <label class="config-label">Leyenda del Fenómeno (SIR)</label>
+                    <div id="legend-container" class="legend-container">
+                        <!-- JS Dinámico -->
+                    </div>
+                </div>
+
+                <!-- Tamaño del grid -->
+                <div class="config-group">
+                    <label class="config-label">Tamaño de Población</label>
+                    <div class="preset-buttons">
+                        <button class="btn-preset active" data-size="50">50×50</button>
+                        <button class="btn-preset" data-size="75">75×75</button>
+                        <button class="btn-preset" data-size="100">100×100</button>
+                    </div>
+                    <div class="custom-size">
+                        <label class="config-sublabel">Personalizado:</label>
+                        <div class="size-inputs">
+                            <input type="number" id="input-rows" class="input-field" value="50" min="3" max="150" placeholder="Filas">
+                            <span class="size-separator">×</span>
+                            <input type="number" id="input-cols" class="input-field" value="50" min="3" max="150" placeholder="Columnas">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Densidad -->
+                <div class="config-group">
+                    <label class="config-label">
+                        Infectados Iniciales: <span id="density-value" class="highlight" style="color: #ef4444;">1%</span>
+                    </label>
+                    <!-- Para epidemia, la "densidad" suele ser baja inicialmente -->
+                    <input type="range" id="input-density" class="slider" min="1" max="20" value="1">
+                </div>
+
+                <!-- Velocidad -->
+                <div class="config-group">
+                    <label class="config-label">
+                        Ritmo de Simulación: <span id="speed-value" class="highlight" style="color: #3b82f6;">150ms</span>
+                    </label>
+                    <input type="range" id="input-speed" class="slider" min="50" max="1000" value="150" step="50">
+                </div>
+
+                <button id="btn-apply" class="btn btn-accent full-width" style="background: linear-gradient(135deg, #3b82f6, #0ea5e9); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);">
+                    <i data-lucide="zap" class="btn-icon"></i> Aplicar Parámetros
+                </button>
+            </div>
+            
+            <!-- Reglas SIR -->
+            <div class="panel-section rules-section">
+                <h3 class="section-title" style="color: #3b82f6;">
+                    <i data-lucide="scroll-text" class="icon"></i> Reglas SIR
+                </h3>
+                <div class="rules-list">
+                    <div class="rule">
+                        <i data-lucide="users" class="rule-svg" style="color: #3b82f6;"></i>
+                        <span>Sano + Vecino Enfer. → <strong>Infección (Prob.)</strong></span>
+                    </div>
+                    <div class="rule">
+                        <i data-lucide="thermometer" class="rule-svg" style="color: #ef4444;"></i>
+                        <span>Enfermo → <strong>Padece la enfermedad N días</strong></span>
+                    </div>
+                    <div class="rule">
+                        <i data-lucide="shield-check" class="rule-svg" style="color: #64748b;"></i>
+                        <span>Enfermo (después de N días) → <strong>Se Recupera</strong></span>
+                    </div>
+                    <div class="rule">
+                        <i data-lucide="ban" class="rule-svg" style="color: #64748b;"></i>
+                        <span>Recuperado → <strong>Inmune (No se infecta más)</strong></span>
+                    </div>
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- Área del canvas / grid -->
+        <section class="grid-area">
+            <div class="canvas-container" id="canvas-container" style="border-color: rgba(59, 130, 246, 0.2);">
+                <canvas id="game-canvas"></canvas>
+            </div>
+            <div class="grid-footer">
+                <span id="grid-info" style="color: #3b82f6;">Grid: 50 × 50 | Click para alternar entre paciente Sano, Enfermo o Recuperado</span>
+            </div>
+            
+
+
+        </section>
+
+    </main>
+
+    <script src="{{ url_for('static', filename='js/game.js') }}?v=3"></script>
+</body>
+</html>
