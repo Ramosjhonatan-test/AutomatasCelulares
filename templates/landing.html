@@ -121,6 +121,54 @@
             background-size: 40px 40px;
             pointer-events: none;
         }
+
+        /* Responsividad para móviles */
+        @media (max-width: 768px) {
+            .landing-container {
+                height: auto;
+                min-height: 100vh;
+                padding: 3rem 1.5rem;
+                overflow-y: auto;
+                justify-content: flex-start;
+            }
+
+            .landing-header {
+                margin-bottom: 2rem;
+            }
+
+            .landing-title {
+                font-size: 2.2rem;
+            }
+
+            .landing-subtitle {
+                font-size: 1rem;
+            }
+
+            .choice-container {
+                flex-direction: column;
+                gap: 1.5rem;
+                width: 100%;
+            }
+
+            .choice-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .choice-title {
+                font-size: 1.5rem;
+            }
+
+            .choice-icon-wrapper {
+                width: 60px;
+                height: 60px;
+                margin-bottom: 1rem;
+            }
+
+            .choice-icon-wrapper i {
+                width: 30px !important;
+                height: 30px !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -144,7 +192,7 @@
                     Implementación clásica del <strong>Juego de la Vida</strong> de John Conway. 
                     Explora la evolución de patrones biológicos simples.
                 </p>
-                <span class="badge">CONWAY GAME OF LIFE</span>
+                <span class="badge">JOHN CONWAY JUEGO DE LA VIDA</span>
             </a>
 
             <!-- Parte 2 -->

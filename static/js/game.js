@@ -70,6 +70,14 @@ class GameController {
             const data = await response.json();
             this._updateFromData(data);
             
+            // Verificar límite de iteraciones definido por el usuario
+            const target = parseInt(document.getElementById('input-iterations')?.value) || 0;
+            if (this.isRunning && target > 0 && data.generation >= target) {
+                this.pause();
+                this._showFinalReport(data);
+                return;
+            }
+
             if (this.isRunning && data.alive === 0 && preAlive > 0 && this.mode === 'conway') {
                 this.pause();
                 this._showToast('Simulación finalizada', 'Todas las células murieron.', 'alert-circle');
@@ -185,9 +193,38 @@ class GameController {
             this._updateLegend();
         }
 
-        document.getElementById('grid-info').textContent = `${data.mode_name} | Grid: ${this.rows} × ${this.cols}`;
         this._resizeCanvas();
         this._render();
+    }
+
+    _showFinalReport(data) {
+        let title = "Simulación Finalizada";
+        let msg = "";
+        let icon = "clipboard-check";
+
+        if (this.mode === 'epidemic') {
+            title = "Reporte Final de Epidemia";
+            icon = "activity";
+            msg = `
+                <div style="margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px;">
+                    <p>Días alcanzados: <strong>${data.generation}</strong></p>
+                    <p style="color: #ef4444;">Enfermos actuales: <strong>${data.enfermos}</strong></p>
+                    <p style="color: #3b82f6;">Sanos: <strong>${data.sanos}</strong></p>
+                    <p style="color: #94a3b8;">Recuperados: <strong>${data.recuperados}</strong></p>
+                </div>
+            `;
+        } else {
+            title = "Reporte Final Conway";
+            icon = "layout-grid";
+            msg = `
+                <div style="margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px;">
+                    <p>Generaciones: <strong>${data.generation}</strong></p>
+                    <p style="color: #00d4aa;">Células Vivas: <strong>${data.alive}</strong></p>
+                    <p style="color: #94a3b8;">Células Muertas: <strong>${data.dead}</strong></p>
+                </div>
+            `;
+        }
+        this._showToast(title, msg, icon, 12000);
     }
 
 
@@ -275,6 +312,15 @@ class GameController {
             document.getElementById('speed-value').textContent = `${this.speed}ms`;
             if (this.isRunning) { clearInterval(this.intervalId); this.intervalId = setInterval(() => this._stepOnce(), this.speed); }
         };
+
+        const iterInput = document.getElementById('input-iterations');
+        if (iterInput) {
+            iterInput.oninput = (e) => {
+                const val = parseInt(e.target.value) || 0;
+                const display = document.getElementById('iterations-limit-value');
+                if (display) display.textContent = val > 0 ? val : '∞';
+            };
+        }
 
         this.canvas.onclick = (e) => {
             const rect = this.canvas.getBoundingClientRect();
