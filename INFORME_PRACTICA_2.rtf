@@ -1,0 +1,51 @@
+{\rtf1\ansi\deff0
+{\fonttbl{\f0\fswiss\fcharset0 Arial;}}
+{\colortbl;\red0\green0\blue0;\red0\green0\blue255;}
+\viewkind4\uc1
+\pard\cf1\f0\fs28\b\qc INFORME DE PR\'c1CTICA 2: MODELADO CON AUT\'d3MATAS CELULARES\b0\par
+\pard\fs24\par
+\b MATERIA:\b0  MSS-953 Modelado y Simulaci\'f3n de Sistemas\par
+\b ESTUDIANTE:\b0  Univ. Jhonatan Ramos Collquehuanca\par
+\b CI:\b0  13054261 (D\'edgito: 1)\par
+\b FECHA:\b0  27 de marzo de 2026\par
+\par
+\pard\b\fs26 1. INTRODUCCI\'d3N\b0\par
+\pard\fs24 El presente informe detalla la implementaci\'f3n y an\'e1lisis de modelos de simulaci\'f3n basados en aut\'f3matas celulares. Se aborda el cl\'e1sico "Juego de la Vida" de John Conway y una adaptaci\'f3n para un fen\'f3meno real: la propagaci\'f3n de epidemias mediante el modelo SIR (Susceptible, Infectado, Recuperado).\par
+\par
+\pard\b\fs26 2. PARTE 1 \endash  IMPLEMENTACI\'d3N DEL JUEGO DE LA VIDA\b0\par
+\pard\fs24\b Reglas Utilizadas:\b0\par
+El sistema se rige por las reglas est\'e1ndar de Conway en una vecindad de Moore (8 vecinos):\par
+1. \b Supervivencia:\b0  Una c\'e9lula viva con 2 o 3 vecinos vivos sobrevive a la siguiente generaci\'f3n.\par
+2. \b Soledad:\b0  Una c\'e9lula viva con menos de 2 vecinos vivos muere.\par
+3. \b Superpoblaci\'f3n:\b0  Una c\'e9lula viva con m\'e1s de 3 vecinos vivos muere.\par
+4. \b Reproducci\'f3n:\b0  Una c\'e9lula muerta con exactamente 3 vecinos vivos revive.\par
+\par
+\b\qc (INSERTAR AQU\'cd CAPTURA DE PANTALLA DE LA PARTE 1)\b0\par
+\par
+\pard\b\fs26 3. PARTE 2 \endash  APLICACI\'d3N DEL MODELO A UN FEN\'d3MENO REAL (EPIDEMIA SIR)\b0\par
+\pard\fs24 Para el fen\'f3meno real, se seleccion\'f3 el modelo de \b Propagaci\'f3n de Epidemias\b0  (asignado por el d\'edgito 1 de CI).\par
+\par
+\b Reglas Adaptadas:\b0\par
+Se definieron 4 estados para las celdas: Vac\'edo (0), Sano (1), Infectado (2) y Recuperado (3).\par
+1. \b Contagio:\b0  Un individuo Sano (1) se infecta y pasa a estado Infectado (2) si tiene al menos un vecino infectado, con una probabilidad P_inf = 0.25.\par
+2. \b Recuperaci\'f3n:\b0  Un individuo Infectado (2) tiene una probabilidad diaria de recuperarse P_rec = 0.15.\par
+3. \b Inmunidad:\b0  Una vez que un individuo llega al estado Recuperado (3), permanece en ese estado indefinidamente y no puede volver a infectarse ni contagiar a otros.\par
+\par
+\b\qc (INSERTAR AQU\'cd CAPTURA DE PANTALLA DE LA PARTE 2)\b0\par
+\par
+\pard\b\fs26 4. PARTE 3 \endash  AN\'c1LISIS DE RESULTADOS\b0\par
+\pard\fs24\b \'bfQu\'e9 comportamiento emergente se observa? \b0\par
+Se observa la formaci\'f3n de frentes de onda de infecci\'f3n que se expanden desde el paciente cero. A medida que la epidemia avanza, se generan "parches" de individuos recuperados (inmunes) que act\'faan como cortafuegos naturales, fragmentando la poblaci\'f3n infectada hasta que el virus se extingue por falta de hu\'e9spedes susceptibles cercanos.\par
+\par
+\b \'bfQu\'e9 par\'e1metros influyen m\'e1s en el resultado?\b0\par
+La densidad de poblaci\'f3n inicial es el factor m\'e1s cr\'edtico. Si la densidad es baja, el virus no logra propagarse y se extingue r\'e1pidamente. Si supera un umbral cr\'edtico, la infecci\'f3n afecta a casi toda la red. La probabilidad de contagio determina la velocidad de este avance.\par
+\par
+\b \'bfEl modelo representa adecuadamente el fen\'f3meno?\b0\par
+Representa adecuadamente la difusi\'f3n espacial del virus. Es un modelo \'fatil para entender conceptos como la "inmunidad de rebaño", ya que aislar celdas detiene visualmente la propagaci\'f3n.\par
+\par
+\b \'bfQu\'e9 limitaciones tiene el modelo?\b0\par
+No considera el movimiento de los individuos (viajes de larga distancia); la poblaci\'f3n es est\'e1tica. Tampoco contempla periodos de incubaci\'f3n asintom\'e1ticos o la p\'e9rdida de inmunidad con el tiempo.\par
+\par
+\b\fs26 5. EJEMPLO DE EJECUCI\'d3N\b0\par
+\pard\fs24 En una ejecuci\'f3n con una cuadr\'edcula de 50x50, una densidad inicial de infectados del 1% y un l\'edmite de 100 d\'edas, se observ\'f3 que la epidemia alcanz\'f3 su pico m\'e1ximo en el d\'eda 42, logrando una tasa de recuperaci\'f3n final del 85% de la poblaci\'f3n total.\par
+}

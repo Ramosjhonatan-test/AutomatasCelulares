@@ -265,21 +265,28 @@ body::before {
     z-index: 1;
     flex: 1;
     display: flex;
+    flex-wrap: nowrap; /* Asegura 3 columnas en desktop */
+    justify-content: center;
     gap: 1.2rem;
     padding: 1.2rem;
-    max-width: 1600px;
+    max-width: 1800px; /* Un poco más ancho para 3 columnas */
     margin: 0 auto;
     width: 100%;
 }
 
-/* ─── Panel de Control ────────────────────────────────────────────────── */
-.control-panel {
-    width: 300px;
-    min-width: 300px;
+/* ─── Sidebars (Izquierda y Derecha) ─────────────────────────────────── */
+.sidebar {
+    width: 280px;
+    min-width: 280px;
     display: flex;
     flex-direction: column;
     gap: 0.8rem;
-    max-height: calc(100vh - 120px);
+    z-index: 5;
+}
+
+/* Permitir scroll sutil si el contenido excede la pantalla incluso dividido */
+.sidebar {
+    max-height: calc(100vh - 130px);
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: var(--accent-primary) transparent;
@@ -688,25 +695,34 @@ select.input-field {
 
 .rule {
     display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
-    font-size: 0.72rem;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 0.78rem;
     color: var(--text-secondary);
-    line-height: 1.4;
-    padding: 0.4rem;
+    line-height: 1.5;
+    padding: 0.7rem 0.9rem;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-normal);
+}
+
+.rule:hover {
     background: var(--bg-secondary);
-    border-radius: var(--radius-sm);
+    border-color: var(--border-accent);
+    transform: translateX(5px);
+    box-shadow: var(--shadow-sm);
 }
 
 .rule strong {
     color: var(--text-primary);
+    font-weight: 600;
 }
 
 .rule-svg {
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     flex-shrink: 0;
-    margin-top: 1px;
 }
 
 .rule-svg.death { color: var(--accent-danger); }
@@ -794,22 +810,43 @@ select.input-field {
 .panel-section:nth-child(4) { animation-delay: 0.15s; }
 
 /* ─── Responsive ──────────────────────────────────────────────────────── */
+@media (max-width: 1200px) {
+    .main-container {
+        flex-wrap: wrap; /* Permite que las sidebars bajen */
+        justify-content: center;
+    }
+    
+    .sidebar {
+        width: 100%;
+        max-width: 50%;
+        min-width: 300px;
+        max-height: unset;
+    }
+    
+    .grid-area {
+        order: -1; /* Mantiene el grid arriba en pantallas medianas */
+        width: 100%;
+        min-width: 100%;
+    }
+}
+
 @media (max-width: 900px) {
     .main-container {
         flex-direction: column;
+        align-items: center;
     }
     
-    .control-panel {
+    .sidebar {
         width: 100%;
+        max-width: 100%;
         min-width: unset;
-        max-height: unset;
         flex-direction: row;
         flex-wrap: wrap;
     }
     
     .panel-section {
         flex: 1;
-        min-width: 250px;
+        min-width: 280px;
     }
     
     .canvas-container {

@@ -7,10 +7,10 @@
  Este archivo contiene el servidor Flask y toda la lógica del Juego de la Vida.
  
  Reglas de Conway:
-   1. Una célula VIVA con menos de 2 vecinos vivos → MUERE (soledad)
-   2. Una célula VIVA con 2 o 3 vecinos vivos    → SOBREVIVE
-   3. Una célula VIVA con más de 3 vecinos vivos  → MUERE (sobrepoblación)
-   4. Una célula MUERTA con exactamente 3 vecinos → REVIVE (reproducción)
+   1. Una célula permanece VIVA si tiene en su vecindad 2 o 3 células vivas.
+   2. Una célula MUERE debido a superpoblación si hay más de 3 células vivas en su vecindad.
+   3. Una célula MUERE a causa del aislamiento si hay menos de 2 células vivas en su vecindad.
+   4. Una célula muerta VUELVE A LA VIDA si hay exactamente 3 células vivas en su vecindad.
 ===============================================================================
 """
 

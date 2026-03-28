@@ -44,35 +44,8 @@
     </header>
 
     <main class="main-container">
-        <aside class="control-panel">
-            
-            <!-- Estadísticas -->
-            <div class="panel-section stats-section">
-                <div class="section-header">
-                    <h3 class="section-title">
-                        <i data-lucide="bar-chart-3" class="icon"></i> Estadísticas
-                    </h3>
-                </div>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <span class="stat-value" id="stat-generation">0</span>
-                        <span class="stat-label">Días (Generación)</span>
-                    </div>
-                    <div class="stat-card alive" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.2);">
-                        <span class="stat-value" id="stat-alive" style="color: #ef4444;">0</span>
-                        <span class="stat-label">Enfermos</span>
-                    </div>
-                    <div class="stat-card dead" style="background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.2);">
-                        <span class="stat-value" id="stat-dead" style="color: #3b82f6;">0</span>
-                        <span class="stat-label">Sanos (Vulnerables)</span>
-                    </div>
-                    <div class="stat-card" style="background: rgba(100, 116, 139, 0.1); border-color: rgba(100, 116, 139, 0.2);">
-                        <span class="stat-value" id="stat-total" style="color: #94a3b8;">0</span>
-                        <span class="stat-label">Recuperados</span>
-                    </div>
-                </div>
-            </div>
-
+        <!-- Barra Lateral Izquierda: Simulación y Parámetros -->
+        <aside class="sidebar sidebar-left">
             <!-- Controles de simulación -->
             <div class="panel-section">
                 <h3 class="section-title">
@@ -169,35 +142,9 @@
                     <i data-lucide="zap" class="btn-icon"></i> Aplicar Parámetros
                 </button>
             </div>
-            
-            <!-- Reglas SIR -->
-            <div class="panel-section rules-section">
-                <h3 class="section-title" style="color: #3b82f6;">
-                    <i data-lucide="scroll-text" class="icon"></i> Reglas SIR
-                </h3>
-                <div class="rules-list">
-                    <div class="rule">
-                        <i data-lucide="users" class="rule-svg" style="color: #3b82f6;"></i>
-                        <span>Sano + Vecino Enfer. → <strong>Infección (Prob.)</strong></span>
-                    </div>
-                    <div class="rule">
-                        <i data-lucide="thermometer" class="rule-svg" style="color: #ef4444;"></i>
-                        <span>Enfermo → <strong>Padece la enfermedad N días</strong></span>
-                    </div>
-                    <div class="rule">
-                        <i data-lucide="shield-check" class="rule-svg" style="color: #64748b;"></i>
-                        <span>Enfermo (después de N días) → <strong>Se Recupera</strong></span>
-                    </div>
-                    <div class="rule">
-                        <i data-lucide="ban" class="rule-svg" style="color: #64748b;"></i>
-                        <span>Recuperado → <strong>Inmune (No se infecta más)</strong></span>
-                    </div>
-                </div>
-            </div>
-
         </aside>
 
-        <!-- Área del canvas / grid -->
+        <!-- Área Central: Canvas / Grid -->
         <section class="grid-area">
             <div class="canvas-container" id="canvas-container" style="border-color: rgba(59, 130, 246, 0.2);">
                 <canvas id="game-canvas"></canvas>
@@ -205,11 +152,62 @@
             <div class="grid-footer">
                 <span id="grid-info" style="color: #3b82f6;">Grid: 50 × 50 | Click para alternar entre paciente Sano, Enfermo o Recuperado</span>
             </div>
-            
-
-
         </section>
 
+        <!-- Barra Lateral Derecha: Estadísticas y Reglas -->
+        <aside class="sidebar sidebar-right">
+            <!-- Estadísticas -->
+            <div class="panel-section stats-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i data-lucide="bar-chart-3" class="icon"></i> Estadísticas
+                    </h3>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-value" id="stat-generation">0</span>
+                        <span class="stat-label">Días (Generación)</span>
+                    </div>
+                    <div class="stat-card alive" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.2);">
+                        <span class="stat-value" id="stat-alive" style="color: #ef4444;">0</span>
+                        <span class="stat-label">Enfermos</span>
+                    </div>
+                    <div class="stat-card dead" style="background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.2);">
+                        <span class="stat-value" id="stat-dead" style="color: #3b82f6;">0</span>
+                        <span class="stat-label">Sanos (Vulnerables)</span>
+                    </div>
+                    <div class="stat-card" style="background: rgba(100, 116, 139, 0.1); border-color: rgba(100, 116, 139, 0.2);">
+                        <span class="stat-value" id="stat-total" style="color: #94a3b8;">0</span>
+                        <span class="stat-label">Recuperados</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reglas SIR -->
+            <div class="panel-section rules-section" style="border-color: rgba(59, 130, 246, 0.3);">
+                <h3 class="section-title" style="color: #3b82f6;">
+                    <i data-lucide="scroll-text" class="icon"></i> Reglas de Propagación (SIR)
+                </h3>
+                <div class="rules-list">
+                    <div class="rule" style="border-color: rgba(59, 130, 246, 0.1);">
+                        <i data-lucide="users" class="rule-svg" style="color: #3b82f6;"></i>
+                        <span>Un individuo <strong>Sano</strong> transita al estado <strong>Infectado</strong> si tiene al menos un vecino enfermo (P_inf = 0.25).</span>
+                    </div>
+                    <div class="rule" style="border-color: rgba(239, 68, 68, 0.1);">
+                        <i data-lucide="thermometer" class="rule-svg" style="color: #ef4444;"></i>
+                        <span>Un individuo <strong>Infectado</strong> tiene una probabilidad diaria de recuperarse (P_rec = 0.15).</span>
+                    </div>
+                    <div class="rule" style="border-color: rgba(16, 185, 129, 0.1);">
+                        <i data-lucide="shield-check" class="rule-svg" style="color: #10b981;"></i>
+                        <span>Tras recuperarse, el individuo adquiere <strong>inmunidad natural</strong> y deja de ser un vector de contagio.</span>
+                    </div>
+                    <div class="rule" style="border-color: rgba(148, 163, 184, 0.1);">
+                        <i data-lucide="ban" class="rule-svg" style="color: #94a3b8;"></i>
+                        <span>El estado <strong>Recuperado</strong> es terminal y permanente: no puede volver a infectarse ni contagiar a otros.</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
     </main>
 
     <script src="{{ url_for('static', filename='js/game.js') }}?v=3"></script>

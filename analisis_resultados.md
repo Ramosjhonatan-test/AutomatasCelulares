@@ -36,4 +36,24 @@ Este documento analiza el comportamiento de los diversos modelos de autómatas c
 - **Observaciones:** A densidades bajas, el tráfico fluye libremente (flujo laminar). Al superar el 40-50%, se forman "atascamientos fantasma" donde los vehículos se detienen sin una causa externa aparente más que la densidad misma.
 
 ---
+
+## Parte 3 – Análisis de Resultados
+
+### 1. ¿Qué comportamiento emergente se observa?
+En el **Juego de la Vida (Conway)**, el comportamiento emergente se manifiesta en la aparición de estructuras complejas y auto-organizadas (osciladores, naves y estructuras estables) a partir de reglas locales extremadamente simples. En el **Modelo SIR**, el comportamiento emergente es la formación de una "curva epidémica" y el fenómeno de "inmunidad de rebaño", donde la acumulación de individuos recuperados detiene la propagación del virus sin que todos los sujetos sanos hayan sido infectados.
+
+### 2. ¿Qué parámetros influyen más en el resultado?
+*   **Densidad Inicial:** Es el factor determinante en ambos modelos. En Conway, define si la población colapsa por aislamiento o sobrepoblación. En el SIR, determina la velocidad y alcance del brote inicial.
+*   **Probabilidades de Transición ($P_{inf}$ y $P_{rec}$):** Específicamente en el modelo epidemiológico, la relación entre la tasa de contagio y la velocidad de recuperación define si la enfermedad se convierte en una pandemia o se extingue localmente.
+*   **Tamaño del Sistema (Grid):** Un grid más extenso permite observar dinámicas de largo plazo y patrones que en espacios reducidos se estabilizarían o extinguirían prematuramente.
+
+### 3. ¿El modelo representa adecuadamente el fenómeno?
+A un nivel conceptual y educativo, sí. El modelo de Conway captura la esencia de la competencia por recursos y la reproducción biológica. El modelo SIR representa adecuadamente la propagación de virus por contacto físico y la importancia de la inmunidad adquirida. Ambos modelos logran demostrar cómo la interacción local de componentes individuales genera dinámicas globales predecibles y medibles.
+
+### 4. ¿Qué limitaciones tiene el modelo?
+*   **Falta de Movilidad:** En este autómata celular, los individuos son estáticos (no se desplazan por el grid), lo cual es una limitación importante para modelar sociedades humanas reales donde el transporte es un vector clave.
+*   **Homogeneidad:** El modelo asume que todos los individuos tienen la misma vulnerabilidad y capacidad de recuperación, ignorando factores reales como la edad, condiciones de salud o medidas de distanciamiento social variable.
+*   **Sincronía:** Las actualizaciones del grid son síncronas (todas las celdas cambian a la vez), mientras que en la realidad los procesos biológicos y de contagio ocurren en tiempo continuo y de forma asíncrona.
+
+---
 *Este análisis forma parte de la Práctica 2 de Modelado y Simulación de Sistemas.*

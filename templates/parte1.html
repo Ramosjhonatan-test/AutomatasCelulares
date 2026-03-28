@@ -46,38 +46,8 @@
     </header>
 
     <main class="main-container">
-        <aside class="control-panel">
-            
-            <!-- Estadísticas -->
-            <div class="panel-section stats-section">
-                <div class="section-header">
-                    <h3 class="section-title">
-                        <i data-lucide="bar-chart-3" class="icon"></i> Estadísticas
-                    </h3>
-                    <button id="btn-clear-stats" class="btn-icon-only" title="Limpiar Grid">
-                        <i data-lucide="trash-2"></i>
-                    </button>
-                </div>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <span class="stat-value" id="stat-generation">0</span>
-                        <span class="stat-label">Generación</span>
-                    </div>
-                    <div class="stat-card alive">
-                        <span class="stat-value" id="stat-alive">0</span>
-                        <span class="stat-label">Vivas</span>
-                    </div>
-                    <div class="stat-card dead">
-                        <span class="stat-value" id="stat-dead">0</span>
-                        <span class="stat-label">Muertas</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-value" id="stat-total">0</span>
-                        <span class="stat-label">Total</span>
-                    </div>
-                </div>
-            </div>
-
+        <!-- Barra Lateral Izquierda: Controles y Configuración -->
+        <aside class="sidebar sidebar-left">
             <!-- Controles de simulación -->
             <div class="panel-section">
                 <h3 class="section-title">
@@ -174,34 +144,9 @@
                     <i data-lucide="check-circle" class="btn-icon"></i> Aplicar Configuración
                 </button>
             </div>
-
-            <!-- Reglas de Conway -->
-            <div class="panel-section rules-section">
-                <h3 class="section-title">
-                    <i data-lucide="scroll-text" class="icon"></i> Reglas de Conway
-                </h3>
-                <div class="rules-list">
-                    <div class="rule">
-                        <i data-lucide="skull" class="rule-svg death"></i>
-                        <span>Viva + &lt;2 vecinos → <strong>Muere</strong> (soledad)</span>
-                    </div>
-                    <div class="rule">
-                        <i data-lucide="heart" class="rule-svg survive"></i>
-                        <span>Viva + 2-3 vecinos → <strong>Sobrevive</strong></span>
-                    </div>
-                    <div class="rule">
-                        <i data-lucide="skull" class="rule-svg death"></i>
-                        <span>Viva + &gt;3 vecinos → <strong>Muere</strong> (sobrepoblación)</span>
-                    </div>
-                    <div class="rule">
-                        <i data-lucide="sparkles" class="rule-svg birth"></i>
-                        <span>Muerta + 3 vecinos → <strong>Revive</strong> (reproducción)</span>
-                    </div>
-                </div>
-            </div>
         </aside>
 
-        <!-- Área del canvas / grid -->
+        <!-- Área Central: Canvas / Grid -->
         <section class="grid-area">
             <div class="canvas-container" id="canvas-container">
                 <canvas id="game-canvas"></canvas>
@@ -210,6 +155,64 @@
                 <span id="grid-info">Grid: 50 × 50 | Click en una celda para alternar su estado</span>
             </div>
         </section>
+
+        <!-- Barra Lateral Derecha: Estadísticas y Reglas -->
+        <aside class="sidebar sidebar-right">
+            <!-- Estadísticas -->
+            <div class="panel-section stats-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i data-lucide="bar-chart-3" class="icon"></i> Estadísticas
+                    </h3>
+                    <button id="btn-clear-stats" class="btn-icon-only" title="Limpiar Grid">
+                        <i data-lucide="trash-2"></i>
+                    </button>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-value" id="stat-generation">0</span>
+                        <span class="stat-label">Generación</span>
+                    </div>
+                    <div class="stat-card alive">
+                        <span class="stat-value" id="stat-alive">0</span>
+                        <span class="stat-label">Vivas</span>
+                    </div>
+                    <div class="stat-card dead">
+                        <span class="stat-value" id="stat-dead">0</span>
+                        <span class="stat-label">Muertas</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value" id="stat-total">0</span>
+                        <span class="stat-label">Total</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reglas de Conway -->
+            <div class="panel-section rules-section">
+                <h3 class="section-title">
+                    <i data-lucide="scroll-text" class="icon"></i> Reglas de Conway
+                </h3>
+                <div class="rules-list">
+                    <div class="rule">
+                        <i data-lucide="heart" class="rule-svg survive"></i>
+                        <span>Una célula permanece <strong>viva</strong> si tiene en su vecindad <strong>2 o 3</strong> células vivas.</span>
+                    </div>
+                    <div class="rule">
+                        <i data-lucide="skull" class="rule-svg death"></i>
+                        <span>Una célula <strong>muere</strong> debido a superpoblación si hay <strong>más de 3</strong> células vivas en su vecindad.</span>
+                    </div>
+                    <div class="rule">
+                        <i data-lucide="skull" class="rule-svg death"></i>
+                        <span>Una célula <strong>muere</strong> a causa del aislamiento si hay <strong>menos de 2</strong> células vivas en su vecindad.</span>
+                    </div>
+                    <div class="rule">
+                        <i data-lucide="sparkles" class="rule-svg birth"></i>
+                        <span>Una célula muerta <strong>vuelve a la vida</strong> si hay exactamente <strong>3</strong> células vivas en su vecindad.</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
     </main>
 
     <script src="{{ url_for('static', filename='js/game.js') }}?v=3"></script>

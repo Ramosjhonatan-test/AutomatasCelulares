@@ -188,27 +188,26 @@
                 </button>
             </div>
 
-            <!-- Reglas de Conway -->
             <div class="panel-section rules-section">
                 <h3 class="section-title">
                     <i data-lucide="scroll-text" class="icon"></i> Reglas de Conway
                 </h3>
                 <div class="rules-list">
                     <div class="rule">
-                        <i data-lucide="skull" class="rule-svg death"></i>
-                        <span>Viva + &lt;2 vecinos → <strong>Muere</strong> (soledad)</span>
-                    </div>
-                    <div class="rule">
                         <i data-lucide="heart" class="rule-svg survive"></i>
-                        <span>Viva + 2-3 vecinos → <strong>Sobrevive</strong></span>
+                        <span>Una célula permanece <strong>viva</strong> si tiene en su vecindad <strong>2 o 3</strong> células vivas.</span>
                     </div>
                     <div class="rule">
                         <i data-lucide="skull" class="rule-svg death"></i>
-                        <span>Viva + &gt;3 vecinos → <strong>Muere</strong> (sobrepoblación)</span>
+                        <span>Una célula <strong>muere</strong> debido a superpoblación si hay <strong>más de 3</strong> células vivas en su vecindad.</span>
+                    </div>
+                    <div class="rule">
+                        <i data-lucide="skull" class="rule-svg death"></i>
+                        <span>Una célula <strong>muere</strong> a causa del aislamiento si hay <strong>menos de 2</strong> células vivas en su vecindad.</span>
                     </div>
                     <div class="rule">
                         <i data-lucide="sparkles" class="rule-svg birth"></i>
-                        <span>Muerta + 3 vecinos → <strong>Revive</strong> (reproducción)</span>
+                        <span>Una célula muerta <strong>vuelve a la vida</strong> si hay exactamente <strong>3</strong> células vivas en su vecindad.</span>
                     </div>
                 </div>
             </div>
