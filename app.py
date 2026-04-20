@@ -94,24 +94,26 @@ class SimulationEngine:
         return np.zeros((self.rows, self.cols), dtype=int)
 
     def _get_neighbors(self, row, col):
-        """Standard 8-neighbor count for Conway."""
+        """Standard 8-neighbor count for Conway (Fixed borders)."""
         count = 0
         for dr in [-1, 0, 1]:
             for dc in [-1, 0, 1]:
                 if dr == 0 and dc == 0: continue
-                r, c = (row + dr) % self.rows, (col + dc) % self.cols
-                if self.grid[r, c] == 1: count += 1
+                r, c = row + dr, col + dc
+                if 0 <= r < self.rows and 0 <= c < self.cols:
+                    if self.grid[r, c] == 1: count += 1
         return count
 
     def _get_all_neighbor_states(self, row, col):
-        """Returns counts of each state in the 8-neighborhood."""
+        """Returns counts of each state in the 8-neighborhood (Fixed borders)."""
         neighbor_states = {}
         for dr in [-1, 0, 1]:
             for dc in [-1, 0, 1]:
                 if dr == 0 and dc == 0: continue
-                r, c = (row + dr) % self.rows, (col + dc) % self.cols
-                state = self.grid[r, c]
-                neighbor_states[state] = neighbor_states.get(state, 0) + 1
+                r, c = row + dr, col + dc
+                if 0 <= r < self.rows and 0 <= c < self.cols:
+                    state = self.grid[r, c]
+                    neighbor_states[state] = neighbor_states.get(state, 0) + 1
         return neighbor_states
 
     def step(self):
